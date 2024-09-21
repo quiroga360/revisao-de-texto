@@ -1,8 +1,48 @@
+// importar o fs permite a leitura de arquivos diferentes de js ou json
 const fs = require('fs');
 
+// process.argv retorna um array com o path dos arquivos que estão sendo executados
 const caminhoArquivo = process.argv;
+
+// queremos armazenar o path que colocamos no prompt de execução
+// node -> index.js -> {{path que especificamos no cmd de execução}}
 const link = caminhoArquivo[2];
 
-fs.readFile(link, 'utf-8', (erro, texto) => {
-    console.log(texto);
+// ler o arquivo que está no path armazenado em link
+fs.readFile(link, 'utf-8', (_, fsTextoInput) => {
+    quebraEmParagrafos(fsTextoInput);
 });
+
+
+// criar um array de palavras
+// contar as ocorrências
+// montar um objeto com o resultado
+
+function quebraEmParagrafos(textoInput) {
+    const paragrafos = textoInput.toLowerCase().split('\n');
+    const contagem = paragrafos.flatMap((paragrafo) => {
+        if (!paragrafo) return [];
+        return verificaPalavrasDuplicadas(paragrafo);
+    });
+    console.log(contagem);
+}
+
+function limpaPalavras(palavraInput) {
+    return palavraInput.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, '');
+};
+
+
+function verificaPalavrasDuplicadas(textoInput) {
+    const listaPalavras = textoInput.split(' ');
+    const resultado = {};
+
+    listaPalavras.forEach(palavra => {
+        if (palavra.length >= 3) {
+            const palavraLimpa = limpaPalavras(palavra);
+            resultado[palavraLimpa] = (resultado[palavraLimpa] || 0) + 1;
+        };
+    });
+
+    return resultado;
+
+};
