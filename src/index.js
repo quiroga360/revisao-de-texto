@@ -9,23 +9,29 @@ const caminhoArquivo = process.argv;
 const link = caminhoArquivo[2];
 
 // ler o arquivo que está no path armazenado em link
-fs.readFile(link, 'utf-8', (_, fsTextoInput) => {
-    quebraEmParagrafos(fsTextoInput);
+fs.readFile(link, 'utf-8', (erro, texto) => {
+    if (erro) {
+        console.log("qual é o erro?", erro.code);
+        return;
+    };
+
+    contaPalavras(texto);
 });
 
-
-// criar um array de palavras
-// contar as ocorrências
-// montar um objeto com o resultado
-
-function quebraEmParagrafos(textoInput) {
-    const paragrafos = textoInput.toLowerCase().split('\n');
+function contaPalavras(texto) {
+    const paragrafos = extraiParagrafos(texto);
     const contagem = paragrafos.flatMap((paragrafo) => {
         if (!paragrafo) return [];
         return verificaPalavrasDuplicadas(paragrafo);
     });
     console.log(contagem);
-}
+};
+
+function extraiParagrafos(texto) {
+    return texto.toLowerCase().split('\n');
+};
+
+
 
 function limpaPalavras(palavraInput) {
     return palavraInput.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, '');
