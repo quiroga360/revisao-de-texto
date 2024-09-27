@@ -10,12 +10,15 @@ const link = caminhoArquivo[2];
 
 // ler o arquivo que está no path armazenado em link
 fs.readFile(link, 'utf-8', (erro, texto) => {
-    if (erro) {
-        console.log("qual é o erro?", erro.code);
-        return;
+
+    try {
+        if (erro) throw erro;
+        contaPalavras(texto);
+    } catch (erro) {
+        if (erro.code === 'ENOENT') console.log("o caminho do arquivo está errado");
+        else console.log('outro erro');
     };
 
-    contaPalavras(texto);
 });
 
 function contaPalavras(texto) {
