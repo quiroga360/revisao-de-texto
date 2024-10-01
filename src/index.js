@@ -1,33 +1,10 @@
-// importar o fs permite a leitura de arquivos diferentes de js ou json
-const fs = require('fs');
-
-// process.argv retorna um array com o path dos arquivos que estão sendo executados
-const caminhoArquivo = process.argv;
-
-// queremos armazenar o path que colocamos no prompt de execução
-// node -> index.js -> {{path que especificamos no cmd de execução}}
-const link = caminhoArquivo[2];
-
-// ler o arquivo que está no path armazenado em link
-fs.readFile(link, 'utf-8', (erro, texto) => {
-
-    try {
-        if (erro) throw erro;
-        contaPalavras(texto);
-    } catch (erro) {
-        if (erro.code === 'ENOENT') console.log("o caminho do arquivo está errado");
-        else console.log('outro erro');
-    };
-
-});
-
-function contaPalavras(texto) {
+export function contaPalavras(texto) {
     const paragrafos = extraiParagrafos(texto);
     const contagem = paragrafos.flatMap((paragrafo) => {
         if (!paragrafo) return [];
         return verificaPalavrasDuplicadas(paragrafo);
     });
-    console.log(contagem);
+    return contagem;
 };
 
 function extraiParagrafos(texto) {
